@@ -21,18 +21,35 @@ if (isset($_GET['cmd']) === true) {
        print_r($all_keys);
        break;
     case 'get_all':
-       $all_keys = $redis->keys('*');
+       //$all_keys = $redis->keys('*es*');
+       if (empty($_GET['pattern']))
+	$pattern='*';
+       else
+	$pattern=$_GET['pattern'];
+       $all_keys = $redis->keys($pattern);
        foreach ($all_keys as $key){
 	 $val = $redis->get($key);
          print('{'. $key . ":" . $val .'}'.PHP_EOL);
        }
        break;
+    case 'scan':
+       $it = NULL; /* Initialize our iterator to NULL */
+       $redis->setOption(Redis::OPT_SCAN, Redis::SCAN_RETRY); /* retry when we get no keys back */
+       while($arr_keys = $redis->scan($it)) {
+         foreach($arr_keys as $str_key) {
+            echo "Here is a key: $str_key\n";
+         }
+         echo "No more keys to scan!\n";
+       }
+       break;
     default:
-       print('http://40.112.220.187/app.php?cmd=set&key=key1&value=val1'.PHP_EOL);
-       print('http://40.112.220.187/app.php?cmd=get&key=key1'.PHP_EOL);
-       print('http://40.112.220.187/app.php?cmd=keys'.PHP_EOL);
+       print('http://host/map.php?cmd=set&key=key1&value=val1'.PHP_EOL);
+       print('http://host/map.php?cmd=get&key=key1'.PHP_EOL);
+       print('http://host/map.php?cmd=keys'.PHP_EOL);
+       print('http://host/map.php?cmd=get_all'.PHP_EOL);
+       print('http://host/map.php?cmd=get_all&pattern=*a*'.PHP_EOL);
   }
 } else {
-  print('http://40.112.220.187/app.php?cmd');
+  print('http://host/map.php?cmd');
   phpinfo();
 } ?>
