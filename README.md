@@ -42,6 +42,17 @@ unzip -o /tmp/phpredis.zip && mv /tmp/phpredis-* /tmp/phpredis && cd /tmp/phpred
 
 execute redisPhp.sh
 
+#####/map.php
+The map.php app allows a http interface for the redis instance. It is currently supports:
+```curl http://publicip/map.php
+```curl http://publicip/map.php?cmd
+
+```curl http://host/map.php?cmd=set&key=key1&value=val1
+```curl http://host/map.php?cmd=get&key=key1
+```curl http://host/map.php?cmd=keys
+```curl http://host/map.php?cmd=get_all
+```curl http://host/map.php?cmd=get_all&pattern=*a*
+
 
 
 
